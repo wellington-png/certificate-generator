@@ -2,7 +2,7 @@ from PIL import Image, ImageDraw, ImageFont
 import PIL
 
 
-class ImageText(object):
+class Certificado(object):
     def __init__(
         self,
         filename_or_size_or_Image,

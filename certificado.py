@@ -7,7 +7,7 @@ class Certificado(CertificadoConfig):
     line_signature = "_______________________________"
 
     def __init__(
-        self, filename="img6.jpg", mode="RGBA", background=(0, 0, 0, 0), encoding="utf8"
+        self, filename="static/img6.jpg", mode="RGBA", background=(0, 0, 0, 0), encoding="utf8"
     ):
         super().__init__(mode, background, encoding)
         self.filename = filename
@@ -19,7 +19,7 @@ class Certificado(CertificadoConfig):
         self.encoding = encoding
 
     def save(self, filename=None):
-        self.image.save(filename or self.filename)
+        self.image.save(f'certificado/{filename}.jpg')
 
     def show(self):
         self.image.show()
@@ -27,7 +27,7 @@ class Certificado(CertificadoConfig):
     def get_size(self):
         return self.image.size
 
-    def create_main_text(self, text, font_size=40, font="freemomo/FreeMono.ttf", stronk=0):
+    def create_main_text(self, text, font_size=40, font="static/freemomo/FreeMono.ttf", stronk=0):
         self.write_text_box(
             (230, 800),
             text,
@@ -39,30 +39,30 @@ class Certificado(CertificadoConfig):
         )
 
     def create_date_city(self, text):
-        x, y = self.get_text_size(font="freemomo/FreeMono.ttf", font_size=40, text=text)
+        x, y = self.get_text_size(font="static/freemomo/FreeMono.ttf", font_size=40, text=text)
         pos = 2500 // 2
         k = x // 2
         pos = pos - k
         self.write_text_box(
             (pos, 1100),
             box_width=912,
-            font_filename="freemomo/FreeMono.ttf",
+            font_filename="static/freemomo/FreeMono.ttf",
             font_size=40,
             color=self.background,
             text=text,
         )
     
     def left_signature(self, nome, cargo, instituicao):
-        self.write_text_box((400, 1300), box_width=600, font_filename="freemomo/FreeMono.ttf", font_size=40, color=self.background, text=self.line_signature, place='center')
-        self.write_text_box((400, 1350), box_width=600, font_filename="freemomo/FreeMono.ttf", font_size=40, color=self.background, text=nome, place='center')
-        self.write_text_box((400, 1400), box_width=600, font_filename="freemomo/FreeMono.ttf", font_size=40, color=self.background, text=cargo, place='center')
-        self.write_text_box((400, 1450), box_width=600, font_filename="freemomo/FreeMono.ttf", font_size=40, color=self.background, text=instituicao, place='center')
+        self.write_text_box((400, 1300), box_width=600, font_filename="static/freemomo/FreeMono.ttf", font_size=40, color=self.background, text=self.line_signature, place='center')
+        self.write_text_box((400, 1350), box_width=600, font_filename="static/freemomo/FreeMono.ttf", font_size=40, color=self.background, text=nome, place='center')
+        self.write_text_box((400, 1400), box_width=600, font_filename="static/freemomo/FreeMono.ttf", font_size=40, color=self.background, text=cargo, place='center')
+        self.write_text_box((400, 1450), box_width=600, font_filename="static/freemomo/FreeMono.ttf", font_size=40, color=self.background, text=instituicao, place='center')
 
     def right_signature(self, nome, cargo, instituicao):
-        self.write_text_box((1500, 1300), box_width=600, font_filename="freemomo/FreeMono.ttf", font_size=40, color=self.background, text=self.line_signature, place='center')
-        self.write_text_box((1500, 1350), box_width=600, font_filename="freemomo/FreeMono.ttf", font_size=40, color=self.background, text=nome, place='center')
-        self.write_text_box((1500, 1400), box_width=600, font_filename="freemomo/FreeMono.ttf", font_size=40, color=self.background, text=cargo, place='center')
-        self.write_text_box((1500, 1450), box_width=600, font_filename="freemomo/FreeMono.ttf", font_size=40, color=self.background, text=instituicao, place='center')
+        self.write_text_box((1500, 1300), box_width=600, font_filename="static/freemomo/FreeMono.ttf", font_size=40, color=self.background, text=self.line_signature, place='center')
+        self.write_text_box((1500, 1350), box_width=600, font_filename="static/freemomo/FreeMono.ttf", font_size=40, color=self.background, text=nome, place='center')
+        self.write_text_box((1500, 1400), box_width=600, font_filename="static/freemomo/FreeMono.ttf", font_size=40, color=self.background, text=cargo, place='center')
+        self.write_text_box((1500, 1450), box_width=600, font_filename="static/freemomo/FreeMono.ttf", font_size=40, color=self.background, text=instituicao, place='center')
 
 
 if __name__ == '__main__':
@@ -76,3 +76,4 @@ PROGRAMA INSTITUCIONAL DE PESQUISA MULTIDISCIPLINAR DE APOIO AO ENSINO, no perí
     t.right_signature('Jose Wellington', 'Cordenador', 'IFPI campos corrente')
     t.left_signature('Jose Wellington', 'Cordenador', 'IFPI campos corrente')
     t.show()
+    t.save('wellington')

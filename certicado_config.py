@@ -5,7 +5,7 @@ import PIL
 class CertificadoConfig(object):
 
     def __init__(self, mode="RGBA", background=(0, 0, 0, 0), encoding="utf8"):
-        self.mode = (mode,)
+        self.mode = mode,
         self.background = background
         self.encoding = encoding
 

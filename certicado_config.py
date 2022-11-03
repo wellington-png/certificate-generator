@@ -19,7 +19,12 @@ class CertificadoConfig(object):
             x = (self.size[0] - text_size[0]) / 2
         if y == "center":
             y = (self.size[1] - text_size[1]) / 2
-        self.draw.text((x, y), text, font=font, fill=color)
+        
+        if '$b' in text:
+            t = text.replace('$b', '')
+            self.draw.text((x, y), t, font=font, fill=color, stroke_width=1)
+        else: 
+            self.draw.text((x, y), text, font=font, fill=color)
         return text_size
 
     def write_text_box(

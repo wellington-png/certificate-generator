@@ -1,8 +1,8 @@
-import os
+from PIL import Image, ImageDraw
 
-from PIL import Image, ImageDraw, ImageFont
-import PIL
 from certicado_config import CertificadoConfig
+from utils.verificar_or_create_dir import create_dir_curso
+from utils.text_bold import text_bold
 
 
 class Certificado(CertificadoConfig):
@@ -24,8 +24,10 @@ class Certificado(CertificadoConfig):
         self.draw = ImageDraw.Draw(self.image)
         self.encoding = encoding
 
-    def save_image(self, filename=None):
-        self.image.save(f"certificado/{filename}.jpg")
+    def save_image(self, filename=None, curso=None):
+        create_dir_curso(curso)
+        # print(f"certificado/{curso}/{filename}.jpg")
+        self.image.save(f"certificado/{curso}/{filename}.jpg")
 
     def save_pdf(self, filename=None):
         self.image.save(f"certificado/{filename}.pdf")
@@ -49,7 +51,7 @@ coordenado por {coordenador}, selecionado através do {edital}, no período de
             text,
             box_width=2000,
             font_filename="static/freemomo/FreeMono.ttf",
-            font_size=40,
+            font_size=45,
             color=self.background,
             place="justify",
         )
@@ -95,7 +97,7 @@ coordenado por {coordenador}, selecionado através do {edital}, no período de
             font_filename="static/freemomo/FreeMono.ttf",
             font_size=40,
             color=self.background,
-            text=cargo,
+            text=text_bold(cargo),
             place="center",
         )
         self.write_text_box(
@@ -133,7 +135,7 @@ coordenado por {coordenador}, selecionado através do {edital}, no período de
             font_filename="static/freemomo/FreeMono.ttf",
             font_size=40,
             color=self.background,
-            text=cargo,
+            text=text_bold(cargo),
             place="center",
         )
         self.write_text_box(

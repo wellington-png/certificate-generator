@@ -1,4 +1,7 @@
 from datetime import datetime
+import csv
+
+from utils.text_bold import text_bold
 
 from certificado import Certificado
 
@@ -6,18 +9,18 @@ from certificado import Certificado
 class Curso:
 
     messes = [
-    'Janeiro',
-    'Fevereiro',
-    'Março',
-    'Abril',
-    'Maio',
-    'Junho',
-    'Julho',
-    'Agosto',
-    'Setembro',
-    'Outubro',
-    'Novembro',
-    'Dezembro'
+        'Janeiro',
+        'Fevereiro',
+        'Março',
+        'Abril',
+        'Maio',
+        'Junho',
+        'Julho',
+        'Agosto',
+        'Setembro',
+        'Outubro',
+        'Novembro',
+        'Dezembro'
     ]
 
     data_atual = datetime.now()
@@ -29,34 +32,58 @@ class Curso:
         self.date_end = date_end
         self.edital = edital
         self.coordenado = coordenado
-        self.path_file_csv = None
+        self.__path_file_csv = None
         self.certificados = []
+        self.dados_alunos = []
+
+    @property
+    def path_file_csv(self):
+        return self.__path_file_csv
+
+    @path_file_csv.setter
+    def path_file_csv(self, path):
+        self.__path_file_csv = path
+        try:
+            print(path)
+            with open(path, 'r') as arquivo:
+                self.dados_alunos = [x for x in csv.DictReader(arquivo)]
+        except Exception as e:
+            self.dados_alunos = []
 
     def gerar_certificados(self, cidade, diretor, campos):
-        cert = Certificado()
+        if not self.dados_alunos:
+            return 'Não foi possivel encotrar o arquivo CSV'
 
-        cert.create_main_text(
-            curso=self.curso,
-            name="Wellington santos Nascimento",
-            carga=self.carga,
-            date_start=self.data_start,
-            date_end=self.date_end,
-            edital=self.edital,
-            coordenador=self.coordenado,
-            cpf="xxx.xxx.xxx-xx",
-        )
-        dia = self.data_atual.day
-        mes = self.data_atual.month
-        ano = self.data_atual.year
+        for index, aluno in enumerate(self.dados_alunos):
+            nome = aluno['nome']
+            cpf = aluno['cpf']
 
-        city_date = f'{cidade}, {dia} de {self.messes[mes-1]} de {ano}.'
-        cert.create_date_city(city_date)
+            cert = Certificado()
 
-        cert.left_signature(self.coordenado, 'Coordenador', campos)
-        cert.right_signature(diretor, 'Diretor', campos)
+            cert.create_main_text(
+                curso=self.curso,
+                name=nome,
+                carga=self.carga,
+                date_start=self.data_start,
+                date_end=self.date_end,
+                edital=self.edital,
+                coordenador=self.coordenado,
+                cpf=cpf,
+            )
 
-        self.certificados.append(cert)
-        cert.save_image("wellington")
+            dia = self.data_atual.day
+            mes = self.data_atual.month
+            ano = self.data_atual.year
+
+            city_date = f'{cidade}, {dia} de {self.messes[mes-1]} de {ano}.'
+            cert.create_date_city(city_date)
+
+            cert.left_signature(self.coordenado, 'Coordenador', campos)
+            cert.right_signature(diretor, 'Diretor', campos)
+
+            self.certificados.append(cert)
+            cert.save_image(nome, self.curso.replace(' ', '_'))
+            print(f'Processando {index+1} / {len(self.dados_alunos)}')
 
 
 if __name__ == '__main__':
@@ -68,4 +95,7 @@ if __name__ == '__main__':
         edital="EDITAL No 03/2020/PROEN/IFS - PROGRAMA INSTITUCIONAL DE PESQUISA MULTIDISCIPLINAR DE APOIO AO ENSINO",
         coordenado="FELIPE GONÇALVES DOS SANTOS",
     )
-    c.gerar_certificados('Corrente - PI', 'Israel Lobato Rocha', 'IFPI - Campus Corrente')
+    c.path_file_csv = 'alunos.csv'
+    # print(c.gerar_certificados('', '', ''))
+    c.gerar_certificados(
+        'Corrente - PI', 'Israel Lobato Rocha', 'IFPI - Campus Corrente')
